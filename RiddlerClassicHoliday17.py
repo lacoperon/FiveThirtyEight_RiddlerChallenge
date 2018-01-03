@@ -1,5 +1,33 @@
 import random
 
+'''
+This function simulates one run of FiveThirtyEight's Riddler Prompt of the
+Holiday Season 2017. The prompt is as follows:
+
+Consider a game of chance called Left, Right, Center.
+Everyone sits in a circle and begins with some $1 bills.
+
+Taking turns, each person rolls three dice.
+For each die, if you roll a 1 or 2 you give a dollar to the person on your left,
+if you roll a 3 or 4 you give a dollar to the person on your right,
+and if you roll a 5 or 6 you put a dollar in the middle.
+
+The moment only a single person has any money left,
+the game ends and that person gets all the money in the center.
+
+Input:
+    playernum : int (the number of players in the game),
+    moneynum  : int (the number of dollars each player starts with)
+
+Output:
+    num_iter : int (the number of rounds the game goes
+                    on for)                                 __
+                                                           _|_|_
+                                                            (••)
+                                                           (    )
+                                                          (      )
+'''
+
 def leftRightCenterSim(playernum, moneynum):
     assert playernum > 0 and isinstance(playernum, int)
     assert moneynum  > 0 and isinstance(moneynum, int)
@@ -26,6 +54,16 @@ def leftRightCenterSim(playernum, moneynum):
 
     return num_iter
 
+'''
+The lrcTrial function repeats trials of this game multiple times.
+Input:
+    numtrials : int (the number of games we want the simulation to play),
+    playernum : int (the number of players in the game),
+    moneynum  : int (the number of dollars each player starts with)
+Output:
+    expected_num_iter : float (the expected # of rounds in the game),
+    stddev            : float (the standard deviation of # rounds in game)
+'''
 def lrcTrial(numtrials, playernum, moneynum):
 
     cum_squared_num_iter = 0
@@ -45,7 +83,7 @@ def lrcTrial(numtrials, playernum, moneynum):
 
 if __name__ == "__main__":
 
-    numtrials = 1000
+    numtrials = 10000
     playernum = 6
     moneynum  = 3
 
