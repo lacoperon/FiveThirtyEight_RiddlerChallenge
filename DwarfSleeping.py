@@ -18,6 +18,12 @@ import random
 
 '''
 Simulation function for one round of this game of dwarven musical beds.
+Input:
+    num_dwarves   : int  (the number of dwarves w beds being simulated)
+    verbose       : bool (whether or not you want to print out all details)
+Output:
+    dwarfInOwnBed : bool (whether or not the last dwarf is in his own bed)
+    num_displaced : int  (how many dwarves are displaced from their beds)
 '''
 
 def dwarfSimulation(num_dwarves=7, verbose=False):
@@ -50,18 +56,23 @@ def dwarfSimulation(num_dwarves=7, verbose=False):
             bedList[rand_bed] = "Dwarf{}".format(dwarf_num)
             emptyBedSet.remove(rand_bed)
 
+    # Checks to see if the last dwarf is in his own bed
     lastDwarf = dwarfList[-1]
     LastDwarfInOwnBed = (bedList[-1] == "Dwarf{}".format(lastDwarf))
 
-    num_displaced_dwarves = 0
 
+    # Counts the number of displaced dwarves in this particular sim run
+    num_displaced_dwarves = 0
     for bedIndex in range(len(bedList)):
         if "Dwarf{}".format(bedIndex+1) != bedList[bedIndex]:
             num_displaced_dwarves += 1
+            
     if verbose:
         print('Dwarves: {}'.format(dwarfList))
         print('Beds: {}'.format(bedList))
         print('# Displaced Dwarves: {}'.format(num_displaced_dwarves))
+
+    return (LastDwarfInOwnBed, num_displaced_dwarves)
 
 '''
 Function for iterating dwarfSimulation many times
@@ -76,13 +87,16 @@ Output:
     expectedNumDisplaced  : float (the expected number of bed-displaced dwarves)
 '''
 def iterateDwarfSim(num_iter, num_dwarves=7, verbose=False, SEED=1):
-    print("Running Many Dwarven Bed Simulations w {} dwarves, {} iterations".format(
+    print("Running Dwarven Bed Simulations w {} dwarves, {} iterations".format(
         num_dwarves, num_iter
     ))
     random.seed(SEED)
+
+    num_last_dwarf_own_bed = 0
     for x in range(num_iter):
         if x % 1000 == 0:
             print("Running Dwarf Sim {}".format(x))
-        dwarfSimulation(num_dwarves, verbose=verbose)
+        lastDwarf, num_displaced = dwarfSimulation(num_dwarves, verbose=verbose)
+
 
 iterateDwarfSim(num_iter=10000, num_dwarves=7, verbose=False)
