@@ -66,7 +66,7 @@ def dwarfSimulation(num_dwarves=7, verbose=False):
     for bedIndex in range(len(bedList)):
         if "Dwarf{}".format(bedIndex+1) != bedList[bedIndex]:
             num_displaced_dwarves += 1
-            
+
     if verbose:
         print('Dwarves: {}'.format(dwarfList))
         print('Beds: {}'.format(bedList))
@@ -92,11 +92,29 @@ def iterateDwarfSim(num_iter, num_dwarves=7, verbose=False, SEED=1):
     ))
     random.seed(SEED)
 
+    # Counter variables for the statistics of interest
     num_last_dwarf_own_bed = 0
+    num_total_displaced_dwarves = 0
+
+    # Runs a whole bunch of simulations, collecting data as we go
     for x in range(num_iter):
-        if x % 1000 == 0:
+        if x % 10000 == 0:
             print("Running Dwarf Sim {}".format(x))
         lastDwarf, num_displaced = dwarfSimulation(num_dwarves, verbose=verbose)
+        num_last_dwarf_own_bed += int(lastDwarf)
+        num_total_displaced_dwarves += num_displaced
 
+    # Calculates the statistics of interest
+    probLastDwarfInOwnBed = float(num_last_dwarf_own_bed)      / num_iter
+    expectedNumDisplaced  = float(num_total_displaced_dwarves) / num_iter
 
-iterateDwarfSim(num_iter=10000, num_dwarves=7, verbose=False)
+    print(
+    """
+    P( last dwarf is in his own bed)    = {0},
+    E( num dwarves displaced from beds) = {1}
+    """.format(probLastDwarfInOwnBed, expectedNumDisplaced)
+    )
+
+    return (probLastDwarfInOwnBed, expectedNumDisplaced)
+
+iterateDwarfSim(num_iter=1000000, num_dwarves=7, verbose=False, SEED=1)
