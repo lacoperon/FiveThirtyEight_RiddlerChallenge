@@ -53,6 +53,7 @@ def simulateGame(numTosses, playerStrategy , opponentStrategy="AP"):
         playerChange, oppChange = takeTurn(action)
         playerScore += playerChange
         oppScore    += oppChange
+        # Opponent's Turn
         if opponentStrategy == "AP":
             oppChange, playerChange = takeTurn("pass")
             playerScore += playerChange
@@ -71,6 +72,10 @@ def simulateGame(numTosses, playerStrategy , opponentStrategy="AP"):
         return 0.5
     else:
         return 0
+
+# I'm certain I'll need this somewhere, but I can't see how to use it quite yet..
+def getPlayerStrategy(playerScore, opponentScore, turnNum):
+    pass
 
 
 '''
