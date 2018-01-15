@@ -36,17 +36,42 @@ and think with this problem some more
 Function to simulate one game of Coinball.
 Input:
     numTosses        : int (number of total tosses in a game)
-    playerStrategy   : str (one of Always Pass (AP), Always Rush (AR),
-                            Risk When Behind (RWB))
+    playerStrategy   : list of (numTosses / 2) actions, either "pass" or "rush"
     opponentStrategy : str (same as above)
 Output:
-    Good question. Probably a string of who won
+    playerWin        : float (1 if player won, 0.5 if tie, 0 if loss)
 '''
-def simulateGame(numTosses, playerStrategy="AP", opponentStrategy="AP"):
+def simulateGame(numTosses, playerStrategy , opponentStrategy="AP"):
     assert numTosses % 2 == 0 # otherwise the game isn't fair
-    assert playerStrategy   in  ["AP", "AR", "RWB"]
     assert opponentStrategy in  ["AP", "AR", "RWB"]
-    pass
+    playerScore = 0
+    oppScore    = 0
+    for i  in range(numTosses / 2):
+        # Player's Turn (currently invariant to cur_score -- TODO is to fix this)
+        action = playerStrategy[i]
+        assert action in ["pass", "rush"]
+        playerChange, oppChange = takeTurn(action)
+        playerScore += playerChange
+        oppScore    += oppChange
+        if opponentStrategy == "AP":
+            oppChange, playerChange = takeTurn("pass")
+            playerScore += playerChange
+            oppScore    += oppChange
+        if opponentStrategy == "AR":
+            oppChange, playerChange = takeTurn("rush")
+            playerScore += playerChange
+            oppScore    += oppChange
+        if opponentStrategy == "RWB":
+            raise Exception("Unimplemented")
+
+    # Returns whether the Player won, tied. or lost
+    if playerScore > oppScore:
+        return 1.
+    elif playerScore == oppScore:
+        return 0.5
+    else:
+        return 0
+
 
 '''
 Function which simulates a single flip in Coinball
